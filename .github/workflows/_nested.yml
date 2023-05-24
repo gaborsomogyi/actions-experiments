@@ -16,11 +16,15 @@ on:
       api_key:
         required: true
 
+env:
+  base_string: "prefix:${{ inputs.testvar }}:${{ inputs.other }}"
+
 jobs:
   run-workflow:
     runs-on: ubuntu-latest
     env:
-      base_string: "prefix:${{ inputs.testvar }}:${{ inputs.other }}"
+      # base_string: "prefix:${{ inputs.testvar }}:${{ inputs.other }}"
+      # second_base_string: "${{ env.base_string }}.suffix"
       second_base_string: ".suffix"
     steps:
       - name: Checkout Repository
