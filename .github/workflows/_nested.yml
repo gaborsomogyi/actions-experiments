@@ -23,7 +23,7 @@ jobs:
   run-workflow:
     runs-on: ubuntu-latest
     env:
-      # base_string: "prefix:${{ inputs.testvar }}:${{ inputs.other }}"
+      base_string: "nested_prefix:${{ inputs.testvar }}:${{ inputs.other }}"
       second_base_string: "$base_string.suffix"
       # second_base_string: ".suffix"
     steps:
