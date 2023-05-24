@@ -1,0 +1,21 @@
+name: Run CI
+
+# Run on all branches
+on:
+  push
+env:
+  TAG_NAME: ${{ github.repository }}:${{ github.sha }}
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nested-job:
+    uses: ./.github/workflows/_nested.yml
+    with:
+      environment: staging
+      testvar: "test"
+      other: "other"
+    secrets:
+      api_key: ${{ secrets.API_KEY }}

@@ -1,0 +1,39 @@
+name: test workflow_call
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: false
+        type: string
+      testvar:
+        required: false
+        type: string
+      other:
+        required: false
+        type: string
+    secrets:
+      api_key:
+        required: true
+
+jobs:
+  run-workflow:
+    runs-on: ubuntu-latest
+    env:
+      base_string: "prefix:${{ inputs.testvar }}:${{ inputs.other }}"
+      second_base_string: "${{ env.base_string }}.suffix"
+    steps:
+      - name: Checkout Repository
+        id: checkout
+        uses: actions/checkout@v3
+      - name: Get Hash ID
+        id: get-hash
+        run: echo "hash=$(echo ${{ github.sha }} | cut -c1-8 )" >> $GITHUB_OUTPUT
+      - name: print variables
+        run: |
+          echo "environment: ${{ inputs.environment }}"
+          echo "testvar: ${{ inputs.testvar }}"
+          echo "api_key: ${{ secrets.api_key }}"
+          echo "hash: ${{ steps.get-hash.outputs.hash }}"
+          echo "base_string: ${{ env.base_string }}"
+          echo "second_base_string: ${{ env.second_base_string }}"
