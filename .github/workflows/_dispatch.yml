@@ -15,6 +15,10 @@ jobs:
       - name: show client payload
         run: |
           echo "client payload: ${{ github.event.client_payload }}"
+      - name: show client payload via tojson
+        env:
+          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+        run: echo "$PAYLOAD_CONTEXT"
       # - name: Update submodules
       #   run: |
       #     git submodule update --init --recursive
