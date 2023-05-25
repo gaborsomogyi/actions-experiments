@@ -1,0 +1,26 @@
+name: Repository Dispatch
+
+on:
+  repository_dispatch:
+    types: [update-submodule]
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: show client payload
+        run: |
+          echo "client payload: ${{ github.event.client_payload }}"
+      # - name: Update submodules
+      #   run: |
+      #     git submodule update --init --recursive
+      #     git submodule foreach --recursive git fetch
+      #     git submodule foreach git merge origin/master
+      #     git add .
+      #     git commit -m "Update submodules"
+      #     git push
+```
