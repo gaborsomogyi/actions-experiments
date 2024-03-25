@@ -1,0 +1,44 @@
+name: Update version
+run-name: Move ${{ inputs.version_type }} tag to ${{ github.event.inputs.target }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: The tag or reference to use
+        required: true
+      version_type:
+        type: choice
+        description: The type of version to update
+        default: 'both'  # major and minor
+        options:
+          - both
+          - major
+          - minor
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Git config
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+    - name: calculate new version
+      id: calculate
+      run: |
+        echo "major=$(echo ${{ inputs.target }} | cut -d. -f1)" >> $GITHUB_OUTPUT
+        echo "minor=$(echo ${{ inputs.target }} | cut -d. -f1,2)" >> $GITHUB_OUTPUT
+    - name: Tag major version
+      if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'major' }}
+      run: |
+        git tag -f ${{ steps.calculate.outputs.major }} ${{ inputs.target }}
+        git push origin ${{ steps.calculate.outputs.major }} --force
+    - name: Tag minor version
+      if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'minor' }}
+      run: | 
+        git tag -f ${{ steps.calculate.outputs.minor }} ${{ inputs.target }}
+        git push origin ${{ steps.calculate.outputs.minor }} --force
