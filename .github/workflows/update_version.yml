@@ -40,7 +40,12 @@ jobs:
       run: |
         git tag -f ${{ steps.calculate.outputs.major }} ${{ inputs.target }}
         git push --delete origin ${{ steps.calculate.outputs.major }}
+
+    - name: Tag major version
+      if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'major' }}
+      run: |
         git push origin ${{ steps.calculate.outputs.major }} --force
+
     - name: Tag minor version
       if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'minor' }}
       run: | 
