@@ -1,6 +1,8 @@
 name: Update version
 run-name: Move ${{ inputs.version_type }} tag to ${{ github.event.inputs.target }}
 
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +17,9 @@ on:
           - both
           - major
           - minor
+
+permissions:
+  contents: write  # This is required for adding a tag
 
 jobs:
   tag:
