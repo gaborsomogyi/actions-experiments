@@ -16,8 +16,8 @@ on:
           - major
           - minor
 
-permissions:
-  contents: write  # This is required for adding a tag
+permissions: write-all
+#  contents: write  # This is required for adding a tag
 
 jobs:
   tag:
