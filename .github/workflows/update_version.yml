@@ -39,7 +39,9 @@ jobs:
       if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'major' }}
       run: |
         git tag -f ${{ steps.calculate.outputs.major }} ${{ inputs.target }}
-        git push --delete origin ${{ steps.calculate.outputs.major }}
+        if [ $(git tag -l "${{ steps.calculate.outputs.major }}") ]; then
+          git push --delete origin ${{ steps.calculate.outputs.major }}
+        fi
 
     - name: Tag major version
       if: ${{ github.event.inputs.version_type == 'both' || github.event.inputs.version_type == 'major' }}
