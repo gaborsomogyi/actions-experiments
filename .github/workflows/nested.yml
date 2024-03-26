@@ -1,8 +1,10 @@
 name: Run CI
 
-# Run on all branches
+# Run on push to main
 on:
-  push
+  push:
+    branches:
+      - main
 env:
   TAG_NAME: ${{ github.repository }}:${{ github.sha }}
 
